@@ -73,7 +73,8 @@ class Application(tk.Tk):
                 self.should_detect_motion = False
 
             if self.prev_motion_frame is None:
-                self.prev_motion_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                self.prev_motion_frame = cv2.cvtColor(
+                    frame, cv2.COLOR_BGR2GRAY)
 
             if self.should_detect_motion:
                 self.motion_detected, prev_motion_frame = motion_detect(
@@ -113,7 +114,7 @@ def motion_detect(photo, last=None):
     grayscale = cv2.GaussianBlur(grayscale, (21, 21), 0)
 
     if last is None:
-        return False, last
+        return False, cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY)
     else:
         delta_frame = cv2.absdiff(last, grayscale)
         thresh_delta = cv2.threshold(
@@ -128,7 +129,8 @@ def motion_detect(photo, last=None):
                 continue
             x, y, w, h = cv2.boundingRect(contour)
         return True, grayscale
-    return False, last
+    return False, cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY)
 
 
-app = Application()
+if __name__ == "__main__":
+    app = Application()
